@@ -62,22 +62,25 @@ int	ft_get_n(char *line)
 	return (i);
 }
 
-char	*ft_putline(char *line)
+char	*ft_putline(char *stash)
 {
 	char	*str;
 
-	if (line == NULL)
+	if (stash == NULL)
 		return (NULL);
-	str = ft_calloc(sizeof(char), ft_get_n(line) + 2);
+	str = ft_calloc(sizeof(char), ft_get_n(stash) + 2);
 	if (str == NULL)
 		return (NULL);
-	while (*line++ && *line != '\n')
+	while (*stash && *stash != '\n')
 	{
-		*str = *line;
+		*str = *stash;
 		str++;
+		stash++;
 	}
-	if (*line == '\n')
+	if (*stash == '\n')
 		*str = '\n';
+	str++;
+	*str = '\0';
 	return (&str[0]);
 }
 
@@ -100,12 +103,13 @@ char	*ft_stash(char *stash)
 	if (str == NULL)
 		return (NULL);
 	i++;
-	while (stash[i])
+	while (stash[i + j])
 	{
 		str[j] = stash[i + j];
 		j++;
 	}
 	str[j] = '\0';
+	free(stash);
 	return (str);
 }
 
@@ -115,10 +119,12 @@ char	*ft_read_line(int fd, char *line)
 	char	*buffer;
 
 	ret = 1;
+	if (fd < 0 || line == NULL)
+		return (NULL);
 	buffer = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (buffer == NULL)
 		return (NULL);
-	while (!ft_strchr(line, '\n') && ret > 0)
+	while (!ft_strchr(buffer, '\n') && ret != 0)
 	{
 		ret = read(fd, buffer, BUFFER_SIZE);
 		if (ret == -1)
@@ -133,17 +139,17 @@ char	*ft_read_line(int fd, char *line)
 	return (line);
 }
 
-char    *ft_get_next_line(int fd)
+char    *get_next_line(int fd)
 {
-        static char		*stash;
-        char    *line;
+	static char		*stash;
+	char    *line;
 
-        if (fd < 0 || BUFFER_SIZE <= 0)
-                return (NULL);
-        stash = ft_putline(stash);
-        if (stash == NULL)
-                return (NULL);
-        line = ft_read_line(fd, stash);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	stash = ft_read_line(fd, stash);
+	if (stash == NULL)
+		return (NULL);
+	line = ft_putline(stash);
 	stash = ft_stash(stash); 
-        return (line);
+	return (line);
 }

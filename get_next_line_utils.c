@@ -72,24 +72,21 @@ char	*ft_strchr(const char *s, int c)
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
-	void	*ptr;
+	int		n;
+	char	*ptr;
 
+	n = nmemb * size;
 	ptr = NULL;
 	if (nmemb != 0 && size != 0 && ((nmemb * size) / size) != nmemb)
 		return (NULL);
-	ptr = (void *)malloc(nmemb * size);
+	ptr = malloc(nmemb * size);
 	if (ptr == NULL)
 		return (NULL);
-	ft_memset((unsigned char *)ptr, 0, nmemb * size);
-	return (ptr);
-}
-
-void	*ft_memset(void *s, int c, size_t n)
-{
 	while (n > 0)
 	{
-		*((unsigned char *)s + n - 1) = (unsigned char)c;
+		*ptr = 0;
+		ptr++;
 		n--;
 	}
-	return (s);	
+	return (&ptr[0]);
 }

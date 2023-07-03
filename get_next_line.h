@@ -22,9 +22,9 @@
 # endif
 
 
-char				*ft_get_next_line(int fd);
+char				*get_next_line(int fd);
 char				*ft_strjoin(char *s1, char *s2);
-char				*ft_putline(char *line);
+char				*ft_putline(char *stash);
 char				*ft_read_line(int fd, char *line);
 char				*ft_strchr(const char *s, int c);
 int			ft_get_n(char *line);

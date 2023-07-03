@@ -22,15 +22,15 @@
 # endif
 
 
-char			*ft_get_next_line(int fd, char **line);
-char			*ft_putline(int fd, char *line);
-char			*ft_read_line(int fd, char *line);
-int		ft_get_n(char *line);
-int		ft_count_line(char *line);
-size_t	ft_strlen(char *str);
-
-ft_strchr
-ft_strjoin
-ft_calloc
+char				*ft_get_next_line(int fd);
+char				*ft_strjoin(char *s1, char *s2);
+char				*ft_putline(char *line);
+char				*ft_read_line(int fd, char *line);
+char				*ft_strchr(const char *s, int c);
+int			ft_get_n(char *line);
+int			ft_count_line(char *line);
+size_t		ft_strlen(char *str);
+void	*ft_calloc(size_t nmemb, size_t size);
+void	*ft_memset(void *s, int c, size_t n);
 
 # endif

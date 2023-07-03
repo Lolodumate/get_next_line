@@ -50,25 +50,25 @@ A part ça c'est programmé avec les pieds, la variable c n'est pas utilisée, e
 
 #include "get_next_line.h"
 
-int	ft_get_n(int fd, char *line)
+int	ft_get_n(char *line)
 {
 	int	i;
 
 	i = 0;
 	if (line == NULL)
-		return (NULL);
+		return (-1);
 	while (line[i] != '\n' && line[i])
 		i++;
 	return (i);
 }
 
-char	*ft_putline(int fd, char *line)
+char	*ft_putline(char *line)
 {
 	char	*str;
 
 	if (line == NULL)
 		return (NULL);
-	str = ft_calloc(sizeof(char), ft_get_n(fd, line) + 2);
+	str = ft_calloc(sizeof(char), ft_get_n(line) + 2);
 	if (str == NULL)
 		return (NULL);
 	while (*line++ && *line != '\n')
@@ -81,16 +81,44 @@ char	*ft_putline(int fd, char *line)
 	return (&str[0]);
 }
 
+char	*ft_stash(char *stash)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = 0;
+	j = 0;
+	while (stash[i] && stash[i] != '\n')
+		i++;
+	if (!stash[i])
+	{
+		free(stash);
+		return (NULL);
+	}
+	str = ft_calloc(sizeof(char), ft_strlen(stash) - i + 1);
+	if (str == NULL)
+		return (NULL);
+	i++;
+	while (stash[i])
+	{
+		str[j] = stash[i + j];
+		j++;
+	}
+	str[j] = '\0';
+	return (str);
+}
+
 char	*ft_read_line(int fd, char *line)
 {
 	int		ret;
 	char	*buffer;
 
-	ret = 0;
+	ret = 1;
 	buffer = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (buffer == NULL)
 		return (NULL);
-	while (!ift_strchr(line, '\n' && ret > 0))
+	while (!ft_strchr(line, '\n') && ret > 0)
 	{
 		ret = read(fd, buffer, BUFFER_SIZE);
 		if (ret == -1)
@@ -98,25 +126,24 @@ char	*ft_read_line(int fd, char *line)
 			free(buffer);
 			return (NULL);
 		}
-			buffer[ret] = '\0';
-			line = ft_strjoin(line, buffer);	
+		buffer[ret] = '\0';
+		line = ft_strjoin(line, buffer);	
 	}
 	free(buffer);
 	return (line);
 }
 
-char    *ft_get_next_line(int fd, char *line)
+char    *ft_get_next_line(int fd)
 {
-        static char		ret;
-        char    *stash;
+        static char		*stash;
+        char    *line;
 
-        len = 0;
         if (fd < 0 || BUFFER_SIZE <= 0)
                 return (NULL);
-        stash = malloc(sizeof(char) * BUFFER_SIZE + 1);
+        stash = ft_putline(stash);
         if (stash == NULL)
-                return (-1);
-        ret = ft_read_line(fd, line);
-	free(stash);
-        return (ret);
+                return (NULL);
+        line = ft_read_line(fd, stash);
+	stash = ft_stash(stash); 
+        return (line);
 }

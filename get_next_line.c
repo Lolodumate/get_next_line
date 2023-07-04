@@ -52,7 +52,7 @@ A part ça c'est programmé avec les pieds, la variable c n'est pas utilisée, e
 
 int	ft_get_n(char *line)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	if (line == NULL)
@@ -64,30 +64,30 @@ int	ft_get_n(char *line)
 
 char	*ft_putline(char *stash)
 {
+	int		i;
 	char	*str;
 
-	if (stash == NULL)
+	i = 0;
+	if (!stash[i])
 		return (NULL);
-	str = ft_calloc(sizeof(char), ft_get_n(stash) + 2);
+	str = ft_calloc((ft_get_n(stash) + 2), sizeof(char));
 	if (str == NULL)
 		return (NULL);
-	while (*stash && *stash != '\n')
+	while (stash[i] && stash[i] != '\n')
 	{
-		*str = *stash;
-		str++;
-		stash++;
+		str[i] = stash[i];
+		i++;
 	}
-	if (*stash == '\n')
-		*str = '\n';
-	str++;
-	*str = '\0';
-	return (&str[0]);
+	if (stash[i] == '\n')
+		str[i] = '\n';
+	str[i + 1] = '\0';
+	return (str);
 }
 
 char	*ft_stash(char *stash)
 {
-	int		i;
-	int		j;
+	unsigned int		i;
+	unsigned int		j;
 	char	*str;
 
 	i = 0;
@@ -99,7 +99,7 @@ char	*ft_stash(char *stash)
 		free(stash);
 		return (NULL);
 	}
-	str = ft_calloc(sizeof(char), ft_strlen(stash) - i + 1);
+	str = ft_calloc((ft_strlen(stash) - i + 1), sizeof(char));
 	if (str == NULL)
 		return (NULL);
 	i++;
@@ -113,15 +113,13 @@ char	*ft_stash(char *stash)
 	return (str);
 }
 
-char	*ft_read_line(int fd, char *line)
+char	*ft_read_line(int fd, char *stash)
 {
 	int		ret;
 	char	*buffer;
 
 	ret = 1;
-	if (fd < 0 || line == NULL)
-		return (NULL);
-	buffer = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+	buffer = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (buffer == NULL)
 		return (NULL);
 	while (!ft_strchr(buffer, '\n') && ret != 0)
@@ -133,10 +131,10 @@ char	*ft_read_line(int fd, char *line)
 			return (NULL);
 		}
 		buffer[ret] = '\0';
-		line = ft_strjoin(line, buffer);	
+		stash = ft_strjoin(stash, buffer);	
 	}
 	free(buffer);
-	return (line);
+	return (stash);
 }
 
 char    *get_next_line(int fd)
@@ -145,7 +143,7 @@ char    *get_next_line(int fd)
 	char    *line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
+		return (0);
 	stash = ft_read_line(fd, stash);
 	if (stash == NULL)
 		return (NULL);

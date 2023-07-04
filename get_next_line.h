@@ -18,15 +18,15 @@
 # include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 5
+#  define BUFFER_SIZE 5
 # endif
 
 
 char				*get_next_line(int fd);
 char				*ft_strjoin(char *s1, char *s2);
 char				*ft_putline(char *stash);
-char				*ft_read_line(int fd, char *line);
-char				*ft_strchr(const char *s, int c);
+char				*ft_read_line(int fd, char *stash);
+char				*ft_strchr(char *s, char c);
 int			ft_get_n(char *line);
 int			ft_count_line(char *line);
 size_t		ft_strlen(char *str);

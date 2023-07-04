@@ -17,11 +17,10 @@ size_t	ft_strlen(char *str)
 	size_t	size;
 
 	size = 0;
-	while (*str)
-	{
+	if (str == NULL)
+		return (0);
+	while (str[size])
 		size++;
-		str++;
-	}
 	return (size);
 }
 
@@ -32,12 +31,15 @@ char	*ft_strjoin(char *s1, char *s2)
 	size_t	i;
 	size_t	j;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
 	i = 0;
 	j = 0;
+	if (s1 == NULL)
+	{
+		s1 = ft_calloc(sizeof(char), 1);
+		s1[0] = '\0';
+	}
 	size_str = ft_strlen(s1) + ft_strlen(s2);
-	str = malloc(sizeof(char) * size_str + 1);
+	str = ft_calloc(sizeof(char), size_str + 1);
 	if (str == NULL)
 		return (NULL);
 	while (s1[i])
@@ -51,42 +53,46 @@ char	*ft_strjoin(char *s1, char *s2)
 		j++;
 	}
 	str[i + j] = '\0';
+	free(s1);
 	return (str);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, char c)
 {
-	char	*str;
+	int	i;
 
-	str = (char *)s;
-	while (*str)
+	i = 0;
+	if (s == NULL)
+		return (NULL);
+	while (s[i])
 	{
-		if (*str == (char)c)
-			return (str);
-		str++;
+		if (s[i] == c)
+			return (&s[i]);
+		i++;
 	}
-	if ((char)c == '\0')
-		return (str);
+	if (c == '\0')
+		return (&s[i]);
 	return (NULL);
 }
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	int		n;
+	int		i;
 	char	*ptr;
 
 	n = nmemb * size;
+	i = 0;
 	ptr = NULL;
 	if (nmemb != 0 && size != 0 && ((nmemb * size) / size) != nmemb)
 		return (NULL);
 	ptr = malloc(nmemb * size);
 	if (ptr == NULL)
 		return (NULL);
-	while (n > 0)
+	while (i < n)
 	{
-		*ptr = 0;
-		ptr++;
-		n--;
+		ptr[i] = 0;
+		i++;
 	}
-	return (&ptr[0]);
+	return (ptr);
 }

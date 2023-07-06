@@ -79,8 +79,11 @@ char	*ft_putline(char *stash)
 		i++;
 	}
 	if (stash[i] == '\n')
+	{
 		str[i] = '\n';
-	str[i + 1] = '\0';
+		i++;
+	}
+	str[i] = '\0';
 	return (str);
 }
 
@@ -103,11 +106,8 @@ char	*ft_stash(char *stash)
 	if (str == NULL)
 		return (NULL);
 	i++;
-	while (stash[i + j])
-	{
-		str[j] = stash[i + j];
-		j++;
-	}
+	while (stash[i])
+		str[j++] = stash[i++];
 	str[j] = '\0';
 	free(stash);
 	return (str);
